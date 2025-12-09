@@ -1,0 +1,11 @@
+MAGIC_MD_PREFIX = "# MAGIC %md "
+MAGIC_IMPORT_PREFIX = "# MAGIC %run "
+MAGIC_TEXT_PLACEHOLDER = "# {text} "
+DATABRICKS_RELATIVE_IMPORT = "./"
+DATABRICKS_IMPORT = "/"
+PYTHON_IMPORT = "import "
+FIRST_ROW = "# Databricks notebook source\n"
+COMMAND = "# COMMAND ----------\n"
+
+TO_PY = "to_py"
+TO_DATABRICKS = "to_databricks"
