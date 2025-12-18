@@ -1,39 +1,70 @@
-import os.path
-
 import click
 
-from databricks_converter.constants import TO_DATABRICKS, TO_PY
-from databricks_converter.converter.converter import Converter
+from databricks_converter.db_to_py_converter import DbToPyConverter
+from databricks_converter.py_to_db_converter import PyToDbConverter
 
 
 @click.group()
-def cli1():
+def db_to_py():
     pass
 
 
-@cli1.command()
-@click.argument('filename')
-@click.option('--destination', default=os.path.dirname(__file__), help='Path to save the output file')
-def to_databricks(filename, destination):
-    databricks_converter = Converter(TO_DATABRICKS, destination)
-    databricks_converter.convert(filename)
+@db_to_py.command()
+@click.argument("source", type=click.Path())
+@click.option(
+    "-d",
+    "--destination",
+    type=click.Path(file_okay=False),
+    default="out",
+    show_default=True,
+    help="Output destination dir.",
+)
+@click.option(
+    "-o",
+    "--overwrite",
+    type=bool,
+    is_flag=True,
+    flag_value=True,
+    help="Overwrite the destination dir.",
+)
+@click.option(
+    "-i",
+    "--import-mapping",
+    type=str,
+    help='Mappings of %run paths to import packages, delimited with "=" and separated with ",". Ex.: "/Notebook_1=utils.module1,/Core/Notebook 2=utils.core.module2".',
+)
+def to_py(source, destination, overwrite, import_mapping):
+    DbToPyConverter(source, destination, overwrite, import_mapping).convert()
 
 
 @click.group()
-def cli2():
+def py_to_db():
     pass
 
 
-@cli2.command()
-@click.argument('filename')
-@click.option('--destination', default=os.path.dirname(__file__), help='Path to save the output file')
-def to_py(filename, destination):
-    print(f"Convert from databricks to python {filename} - {destination}")
-    python_converter = Converter(TO_PY, destination)
-    python_converter.convert(filename)
+@py_to_db.command()
+@click.argument("source", type=click.Path())
+@click.option(
+    "-d",
+    "--destination",
+    type=click.Path(file_okay=False),
+    default="out",
+    show_default=True,
+    help="Output destination dir.",
+)
+@click.option(
+    "-o",
+    "--overwrite",
+    type=bool,
+    is_flag=True,
+    flag_value=True,
+    help="Overwrite the destination dir.",
+)
+def to_db(source, destination, overwrite):
+    PyToDbConverter(source, destination, overwrite).convert()
 
 
-main = click.CommandCollection(sources=[cli1, cli2])
+main = click.CommandCollection(sources=[db_to_py, py_to_db])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

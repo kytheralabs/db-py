@@ -1,22 +1,5 @@
-venv
-*.zip
 .idea
-.DS_Store
-*.egg-info
-
-# Python related
-.pytest_cache
-__pytest_cache__
-
-*.py[cod]
-
-# Project related
-
-*_to_py.py
-*_to_databricks.py
-
-test_main
-dist
-build
-converted.py
-
+*.iml
+venv
+__pycache__
+example/out
